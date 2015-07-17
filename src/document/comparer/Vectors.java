@@ -17,7 +17,6 @@ import java.util.Set;
 //-------------------------------------------------------------
 public class Vectors {
 
-
 	//-------------------------------------------------------------
 	// Word Count Vector
 	//-------------------------------------------------------------
@@ -79,29 +78,33 @@ public class Vectors {
 	//Semantics-based vector
 	//-------------------------------------------------------------	
 	
-	public static HashMap<String, Integer> makeSemanticVector(HashMap<String, Integer> wcVector) throws SQLException {
-		Database db = new Database(/*"WindowsXMachina", 3306, "semanticdb", "kellen", "1234"*/); //(host, port, database, user, password)
+	public static HashMap<String, Integer> makeSemanticVector(HashMap<String, Integer> wcVector) throws SQLException {		
 		HashMap<String, Integer> map = new HashMap<>();
-		String table = null;
-		Set<String> keySet = wcVector.keySet();
-	
-		//While the vector has keys, grab their magnitude and throw it through the DB
-		for(String s : keySet) {
-			table = db.findTable(s);
-			
-			if(table != null && !map.containsKey(table)) {
-				map.put(table, wcVector.get(s));			
-			
-			} else if(table != null && map.containsKey(table)) {
-				map.put(table, wcVector.get(s) + map.get(table));
-			
-			}
-			
-			table = null;
-		}		
-	
-		db.killDB();
-	
+		
+		try {
+			Database db = new Database();		
+		
+			String table = null;
+			Set<String> keySet = wcVector.keySet();
+
+			//While the vector has keys, grab their magnitude and throw it through the DB
+			for(String s : keySet) {
+				table = db.findTable(s);
+
+				if(table != null && !map.containsKey(table)) {
+					map.put(table, wcVector.get(s));			
+
+				} else if(table != null && map.containsKey(table)) {
+					map.put(table, wcVector.get(s) + map.get(table));
+
+				}
+
+				table = null;
+			}		
+
+			db.killDB();
+		
+		} catch (Exception ex) {}
 		return map;
 	
 	} //End makeSemanticVector(HashMap<String, Integer>)

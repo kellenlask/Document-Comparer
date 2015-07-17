@@ -145,7 +145,7 @@ public class Database {
 			for(String s : records) {
 				
 				if(!containsRecord(table, s)) {	
-					stmt.executeUpdate("INSERT INTO " + table + " (Word) VALUES ('" + s + "');");	
+					stmt.executeUpdate("INSERT INTO " + table + " VALUES ('" + s + "');");
 				}				
 			}
 			
@@ -157,7 +157,24 @@ public class Database {
 			except.printStackTrace();
 			
 		}
-	} //End addRecords(String, String[])	
+	} //End addRecords(String, String[])
+	
+	public void addColumn(String table, String column) throws SQLException {
+		try {
+			Statement stmt = connect.createStatement();
+			stmt.executeUpdate("ALTER TABLE " + table + " ADD '" + column + "' varchar(50);");
+			
+			if(stmt != null) {
+				stmt.close();
+			}
+			
+		} catch (SQLException except) {
+			System.out.println("Table: " + table);
+			except.printStackTrace();
+			
+		} //End try-catch
+
+	} //End public void addColumn(String, String) throws SQLException
 	
 	//Kills the database connection to avoid memory leaks.
 	public void killDB() throws SQLException {

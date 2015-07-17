@@ -22,6 +22,12 @@ public class MakeDatabase {
 			
 			db.addTable("Words");
 			
+			for(int i = 0; i < 30; i++) {
+				db.addColumn("Words", "" + i);
+					
+			} //End For Loop
+			
+			int max = 0;
 			ArrayList<String> wordList = new ArrayList<>();
 			boolean termExistsInDB;
 			String tmp = null;
@@ -32,24 +38,11 @@ public class MakeDatabase {
 				
 				while(sect.hasNext()) {
 					wordList.add(sect.next());
+					
 				}	
 				
-				termExistsInDB = false;
-				
-				for(String s : wordList) {
-					
-					tmp = db.findTable(s);
-					if(tmp != null) {
-						db.addRecords(tmp, wordList);
-						break;
-					} 
-				}
-			
-				if(tmp == null && wordList.size() > 0) {
-					db.addTable(wordList.get(0));
-					db.addRecords(wordList.get(0), wordList);
-				} 
-				
+				db.addRecords("Words", wordList);
+//				
 				wordList.clear();
 				tmp = null;	
 			}		
